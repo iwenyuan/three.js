@@ -25,7 +25,10 @@ export default defineConfig({
         {
           axios: [['default', 'axios']]
         }
-      ]
+      ],
+      eslintrc: {
+        enabled: false
+      }
     }),
     Components({
       dts: true,
