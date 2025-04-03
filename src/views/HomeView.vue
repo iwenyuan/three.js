@@ -10,9 +10,16 @@ const handleClick = (item) => {
   <a-layout class="home-view">
     <a-layout-sider theme="dark" collapsible>
       <a-menu theme="dark">
-        <a-menu-item v-for="item in routes" :key="item.path" @click="handleClick(item)">
-          {{ item.meta.title }}
-        </a-menu-item>
+        <template v-for="item in routes" :key="item.path">
+          <a-sub-menu v-if="item.children" :title="item.meta.title">
+            <a-menu-item v-for="i in item.children" :key="i.path" @click="handleClick(i)">
+              {{ i.meta.title }}
+            </a-menu-item>
+          </a-sub-menu>
+          <a-menu-item v-else :key="item.path" @click="handleClick(item)">
+            {{ item.meta.title }}
+          </a-menu-item>
+        </template>
       </a-menu>
       <template #trigger="{ collapsed }">
         <IconCaretRight v-if="collapsed" color="#fff"></IconCaretRight>
