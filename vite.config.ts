@@ -58,5 +58,26 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api/, '')
       }
     }
+  },
+  // ------打包配置------
+  build: {
+    chunkSizeWarningLimit: 2000, // 消除打包大小超过500kb警告
+    // 在生产环境移除console.log
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        pure_funcs: ['console.log', 'console.info'],
+        drop_debugger: true
+      }
+    },
+    // 静态资源打包到dist下的不同目录
+    assetsDir: 'static/assets',
+    rollupOptions: {
+      output: {
+        chunkFileNames: 'static/js/[name]-[hash].js',
+        entryFileNames: 'static/js/[name]-[hash].js',
+        assetFileNames: 'static/[ext]/[name]-[hash].[ext]'
+      }
+    }
   }
 })

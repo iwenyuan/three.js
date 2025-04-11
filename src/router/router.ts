@@ -1,7 +1,9 @@
-export const routes = [
+import type { RouteRecordRaw } from 'vue-router'
+
+export const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    name: '',
+    name: 'Geometry',
     meta: {
       title: '几何体'
     },
@@ -34,7 +36,7 @@ export const routes = [
       {
         path: '/obj',
         name: 'Obj',
-        component: () => import('@/views/model/Obj.vue'),
+        component: () => import('@/views/Model/Obj.vue'),
         meta: {
           title: 'OBJ'
         }
@@ -42,7 +44,7 @@ export const routes = [
       {
         path: '/gltf',
         name: 'Gltf',
-        component: () => import('@/views/model/Gltf.vue'),
+        component: () => import('@/views/Model/Gltf.vue'),
         meta: {
           title: 'GLTF'
         }

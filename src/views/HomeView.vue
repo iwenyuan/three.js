@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { routes } from '@/router/router'
 const router = useRouter()
 const handleClick = (item) => {
