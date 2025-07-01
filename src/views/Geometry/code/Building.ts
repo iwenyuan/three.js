@@ -15,9 +15,7 @@ class Building extends ThreeBase {
     console.log(233)
   }
 
-  protected override onRender(): void {
-    console.log(233)
-  }
+  protected override onRender(): void {}
 }
 
 export default Building

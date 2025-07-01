@@ -3,81 +3,69 @@ import ThreeBase from '@/core/ThreeBase'
 import type { ThreeBaseConfig } from '@/core/ThreeBase'
 
 class Tank extends ThreeBase {
-  private tank: THREE.Object3D | null = null
-  private turretPivot: THREE.Object3D | null = null
-  private targetBob: THREE.Object3D | null = null
-  private targetMesh: THREE.Mesh | null = null
-  private targetMaterial: THREE.MeshPhongMaterial | null = null
-  private curve: THREE.SplineCurve | null = null
-  private targetPosition2: THREE.Vector3 = new THREE.Vector3()
-  private tankPosition: THREE.Vector2 = new THREE.Vector2()
-  private tankTarget: THREE.Vector2 = new THREE.Vector2()
-  private time: number = 0
+  private tank!: THREE.Object3D
+  private turretPivot!: THREE.Object3D
+  private targetBob!: THREE.Object3D
+  private targetMesh!: THREE.Mesh
+  private targetMaterial!: THREE.MeshPhongMaterial
+  private curve!: THREE.SplineCurve
+  private targetPosition2 = new THREE.Vector3()
+  private tankPosition = new THREE.Vector2()
+  private tankTarget = new THREE.Vector2()
+  private time = 0
 
   constructor(config: ThreeBaseConfig) {
     super(config)
-
-    if (this.camera) {
-      this.camera.position.set(50, 50, 50)
-    }
-
-    if (this.scene) {
-      this.scene.background = new THREE.Color(0x000000)
-    }
+    // 不要在构造函数里操作camera/scene
   }
 
   protected override onReady(): void {
-    // 添加灯光
-    this.addLight()
+    // 初始化相机和场景
+    this.getCamera().position.set(50, 50, 50)
+    this.getScene().background = new THREE.Color(0x000000)
 
+    this.addLight()
     this.initTank()
   }
 
-  protected override onRender(): void {}
-
-  addLight(): void {
-    // 平行光
-    const light1 = new THREE.DirectionalLight(0xffffff, 1)
-    light1.position.set(0, 20, 0)
-
-    const light2 = new THREE.DirectionalLight(0xffffff, 1)
-    light2.position.set(1, 2, 4)
-
-    if (this.scene) {
-      this.scene.add(light1)
-      this.scene.add(light2)
-    }
+  protected override onRender(): void {
+    this.updateTankAnimation(this.time * 1000)
   }
 
-  initTank(): void {
+  private addLight(): void {
+    const light1 = new THREE.DirectionalLight(0xffffff, 1)
+    light1.position.set(0, 20, 0)
+    const light2 = new THREE.DirectionalLight(0xffffff, 1)
+    light2.position.set(1, 2, 4)
+    this.getScene().add(light1)
+    this.getScene().add(light2)
+  }
+
+  private initTank(): void {
     this.tank = new THREE.Object3D()
-    this.scene?.add(this.tank)
+    this.getScene().add(this.tank)
 
     // 底盘
-    const carWidth = 4
-    const carHeight = 1
-    const carLength = 8
+    const carWidth = 4,
+      carHeight = 1,
+      carLength = 8
     const bodyGeometry = new THREE.BoxGeometry(carWidth, carHeight, carLength)
-    const bodyMaterial = new THREE.MeshPhongMaterial({
-      color: 0x6688aa
-    })
+    const bodyMaterial = new THREE.MeshPhongMaterial({ color: 0x6688aa })
     const bodyMesh = new THREE.Mesh(bodyGeometry, bodyMaterial)
     bodyMesh.position.y = 1.4
     this.tank.add(bodyMesh)
 
     // 轮子
-    const wheelRadius = 1
-    const wheelThickness = 0.5
-    const wheelSegments = 36
+    const wheelRadius = 1,
+      wheelThickness = 0.5,
+      wheelSegments = 36
     const wheelGeometry = new THREE.CylinderGeometry(
       wheelRadius,
       wheelRadius,
       wheelThickness,
       wheelSegments
     )
-    const wheelMaterial = new THREE.MeshPhongMaterial({
-      color: 0x888888
-    })
+    const wheelMaterial = new THREE.MeshPhongMaterial({ color: 0x888888 })
     const wheelPositions: [number, number, number][] = [
       [-carWidth / 2 - wheelThickness / 2, -carHeight / 2, carLength / 3],
       [carWidth / 2 + wheelThickness / 2, -carHeight / 2, carLength / 3],
@@ -95,18 +83,14 @@ class Tank extends ThreeBase {
 
     // 炮台
     const domeGeometry = new THREE.SphereGeometry(2, 12, 12, 0, Math.PI * 2, 0, Math.PI / 2)
-    const domeMaterial = new THREE.MeshPhongMaterial({
-      color: 0x6688aa
-    })
+    const domeMaterial = new THREE.MeshPhongMaterial({ color: 0x6688aa })
     const domeMesh = new THREE.Mesh(domeGeometry, domeMaterial)
     domeMesh.position.y = 0.5
     bodyMesh.add(domeMesh)
 
     // 炮管
     const turretGeometry = new THREE.CylinderGeometry(0.5, 0.5, 5, 32)
-    const turretMaterial = new THREE.MeshPhongMaterial({
-      color: 0x6688aa
-    })
+    const turretMaterial = new THREE.MeshPhongMaterial({ color: 0x6688aa })
     const turretMesh = new THREE.Mesh(turretGeometry, turretMaterial)
     turretMesh.position.z = 2.5
     turretMesh.rotation.x = Math.PI * 0.5
@@ -118,27 +102,20 @@ class Tank extends ThreeBase {
 
     // 目标
     const targetGeometry = new THREE.SphereGeometry(0.5, 36, 36)
-    this.targetMaterial = new THREE.MeshPhongMaterial({
-      color: 0x00ff00
-    })
-
+    this.targetMaterial = new THREE.MeshPhongMaterial({ color: 0x00ff00 })
     this.targetMesh = new THREE.Mesh(targetGeometry, this.targetMaterial)
-    console.log(this.targetMesh)
 
     const targetElevation = new THREE.Object3D()
     this.targetBob = new THREE.Object3D()
-    this.scene?.add(targetElevation)
-
+    this.getScene().add(targetElevation)
     targetElevation.position.y = 8
     targetElevation.position.z = carLength * 2
     targetElevation.add(this.targetBob)
     this.targetBob.add(this.targetMesh)
 
-    const targetPosition = new THREE.Vector3()
-    this.targetBob.getWorldPosition(targetPosition)
-
     this.turretPivot.lookAt(this.targetBob.position)
 
+    // 路径
     this.curve = new THREE.SplineCurve([
       new THREE.Vector2(-10, 20),
       new THREE.Vector2(-5, 5),
@@ -153,46 +130,34 @@ class Tank extends ThreeBase {
     ])
     const points = this.curve.getPoints(50)
     const geometry = new THREE.BufferGeometry().setFromPoints(points)
-    const material = new THREE.LineBasicMaterial({
-      color: 0xff0000
-    })
+    const material = new THREE.LineBasicMaterial({ color: 0xff0000 })
     const splineObject = new THREE.Line(geometry, material)
     splineObject.rotation.x = Math.PI * 0.5
     splineObject.position.y = 0.05
-    this.scene?.add(splineObject)
+    this.getScene().add(splineObject)
 
-    this.render(0)
+    this.updateTankAnimation(0)
   }
 
-  render(t: number): void {
+  private updateTankAnimation(t: number): void {
     this.time = t * 0.001
 
     // 上下移动目标
-    if (this.targetBob) {
-      this.targetBob.position.y = Math.sin(this.time * 2) * 4
-    }
-    this.targetMaterial?.emissive.setHSL((this.time * 10) % 1, 1, 0.25)
-    this.targetMaterial?.color?.setHSL((this.time * 10) % 1, 1, 0.25)
+    this.targetBob.position.y = Math.sin(this.time * 2) * 4
+    this.targetMaterial.emissive.setHSL((this.time * 10) % 1, 1, 0.25)
+    this.targetMaterial.color.setHSL((this.time * 10) % 1, 1, 0.25)
 
     // 获取目标全局坐标
-    this.targetMesh?.getWorldPosition(this.targetPosition2)
+    this.targetMesh.getWorldPosition(this.targetPosition2)
     // 炮台瞄准目标
-    this.turretPivot?.lookAt(this.targetPosition2)
-
-    // 获取目标全局坐标
-    this.targetMesh?.getWorldPosition(this.targetPosition2)
-    // 炮台瞄准目标
-    this.turretPivot?.lookAt(this.targetPosition2)
+    this.turretPivot.lookAt(this.targetPosition2)
 
     // 根据路线移动坦克
     const tankTime = this.time * 0.05
-    this.curve?.getPointAt(tankTime % 1, this.tankPosition)
-    // 获取路径 坦克前一点坐标，用于坦克头向前
-    this.curve?.getPointAt((tankTime + 0.01) % 1, this.tankTarget)
-    this.tank?.position.set(this.tankPosition.x, 0, this.tankPosition.y)
-    this.tank?.lookAt(this.tankTarget.x, 0, this.tankTarget.y)
-
-    requestAnimationFrame(this.render)
+    this.curve.getPointAt(tankTime % 1, this.tankPosition)
+    this.curve.getPointAt((tankTime + 0.01) % 1, this.tankTarget)
+    this.tank.position.set(this.tankPosition.x, 0, this.tankPosition.y)
+    this.tank.lookAt(this.tankTarget.x, 0, this.tankTarget.y)
   }
 }
 
