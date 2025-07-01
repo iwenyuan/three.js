@@ -2,7 +2,24 @@ import type { RouteRecordRaw } from 'vue-router'
 
 export const routes: RouteRecordRaw[] = [
   {
-    path: '/',
+    path: '/learn',
+    name: 'Learn',
+    meta: {
+      title: '学习'
+    },
+    children: [
+      {
+        path: '/camera',
+        name: 'Camera',
+        component: () => import('@/views/Learn/Camera.vue'),
+        meta: {
+          title: '相机'
+        }
+      }
+    ]
+  },
+  {
+    path: '/geometry',
     name: 'Geometry',
     meta: {
       title: '几何体'
@@ -27,7 +44,7 @@ export const routes: RouteRecordRaw[] = [
     ]
   },
   {
-    path: '/',
+    path: '/model',
     name: 'Model',
     meta: {
       title: '模型'
