@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "@arco-plugins/vite-vue": "^1.4.5",
-    "@types/three": "^0.174.0",
     "pinia": "^2.1.7",
     "pinia-plugin-persistedstate": "^4.2.0",
     "sass": "^1.85.1",
@@ -25,6 +24,7 @@
     "@rushstack/eslint-patch": "^1.8.0",
     "@tsconfig/node20": "^20.1.6",
     "@types/node": "^20.12.5",
+    "@types/three": "^0.178.0",
     "@vitejs/plugin-vue": "^5.0.4",
     "@vue/eslint-config-prettier": "^9.0.0",
     "@vue/eslint-config-typescript": "^13.0.0",
