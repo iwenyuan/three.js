@@ -15,6 +15,22 @@ export const routes: RouteRecordRaw[] = [
         meta: {
           title: '相机'
         }
+      },
+      {
+        path: '/buffet-geometry',
+        name: 'BufferGeometry',
+        component: () => import('@/views/Learn/Geometry.vue'),
+        meta: {
+          title: '几何体'
+        }
+      },
+      {
+        path: '/random-terrain',
+        name: 'RandomTerrain',
+        component: () => import('@/views/Learn/RandomTerrain.vue'),
+        meta: {
+          title: '随机地形'
+        }
       }
     ]
   },

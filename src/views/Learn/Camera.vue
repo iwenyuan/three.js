@@ -2,17 +2,19 @@
 import Camera from './code/Camera'
 
 const conRef = ref()
-let three: Camera | null = null
+let camera: Camera | null = null
 
 onMounted(() => {
-  three = new Camera({
+  camera = new Camera({
     container: conRef.value
   })
 })
 
-onBeforeMount(() => {
-  if (three) {
-    three.destroy()
+onUnmounted(() => {
+  console.log(camera)
+
+  if (camera) {
+    camera.destroy()
   }
 })
 </script>

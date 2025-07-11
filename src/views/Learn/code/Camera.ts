@@ -6,6 +6,7 @@ import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min.js'
 class Camera extends ThreeBase {
   private debugCamera!: THREE.PerspectiveCamera
   private cameraHelper!: THREE.CameraHelper
+  private gui!: GUI
 
   constructor(config: ThreeBaseConfig) {
     super(config)
@@ -50,21 +51,30 @@ class Camera extends ThreeBase {
   }
 
   private addGui(): void {
-    const gui = new GUI()
-    gui.add(this.debugCamera, 'fov', [30, 60, 10]).onChange(this.onChange.bind(this))
-    gui
+    this.gui = new GUI()
+    this.gui.add(this.debugCamera, 'fov', [30, 60, 10]).onChange(this.onChange.bind(this))
+    this.gui
       .add(this.debugCamera, 'aspect', {
         '16/9': 16 / 9,
         '4/3': 4 / 3
       })
       .onChange(this.onChange.bind(this))
-    gui.add(this.debugCamera, 'near', 0, 300).onChange(this.onChange.bind(this))
-    gui.add(this.debugCamera, 'far', 300, 800).onChange(this.onChange.bind(this))
+    this.gui.add(this.debugCamera, 'near', 0, 300).onChange(this.onChange.bind(this))
+    this.gui.add(this.debugCamera, 'far', 300, 800).onChange(this.onChange.bind(this))
   }
 
   private onChange() {
     this.debugCamera.updateProjectionMatrix()
     this.cameraHelper.update()
+  }
+
+  public override destroy(): void {
+    // 先调用父类的销毁方法，释放ThreeBase相关资源
+    super.destroy()
+    console.log(233)
+
+    // 销毁GUI
+    this.gui.destroy()
   }
 }
 

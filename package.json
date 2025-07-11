@@ -12,9 +12,10 @@
   },
   "dependencies": {
     "@arco-plugins/vite-vue": "^1.4.5",
-    "pinia": "^2.1.7",
-    "pinia-plugin-persistedstate": "^4.2.0",
+    "pinia": "^2.3.1",
+    "pinia-plugin-persistedstate": "^3.2.3",
     "sass": "^1.85.1",
+    "simplex-noise": "^4.0.3",
     "three": "^0.174.0",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"

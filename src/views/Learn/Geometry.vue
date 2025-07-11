@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import Obj from './code/Obj'
+import Geometry from './code/Geometry'
 
 const conRef = ref()
-let three: Obj | null = null
+let three: Geometry | null = null
 
 onMounted(() => {
-  three = new Obj({
+  three = new Geometry({
     container: conRef.value
   })
 })
@@ -27,7 +27,6 @@ onUnmounted(() => {
   height: 100vh;
   position: relative;
   overflow: hidden;
-
   canvas {
     width: 100% !important;
     height: 100% !important;

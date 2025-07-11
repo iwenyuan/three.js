@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Building from './code/building'
+import Building from './code/Building'
 
 const conRef = ref()
 let three: Building | null = null
@@ -10,7 +10,7 @@ onMounted(() => {
   })
 })
 
-onBeforeMount(() => {
+onUnmounted(() => {
   if (three) {
     three.destroy()
   }

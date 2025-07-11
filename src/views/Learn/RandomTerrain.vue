@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import Obj from './code/Obj'
+import RandomTerrain from './code/RandomTerrain'
 
 const conRef = ref()
-let three: Obj | null = null
+let randomTerrain: RandomTerrain | null = null
 
 onMounted(() => {
-  three = new Obj({
+  randomTerrain = new RandomTerrain({
     container: conRef.value
   })
 })
 
 onUnmounted(() => {
-  if (three) {
-    three.destroy()
+  if (randomTerrain) {
+    randomTerrain.destroy()
   }
 })
 </script>

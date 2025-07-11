@@ -136,11 +136,11 @@ abstract class ThreeBase {
     if (!this.camera || !this.renderer || !this.config.enableControls) return
 
     this.controls = new OrbitControls(this.camera, this.renderer.domElement)
-    this.controls.enableDamping = true
-    this.controls.dampingFactor = 0.05
-    this.controls.screenSpacePanning = false
-    this.controls.minDistance = 1
-    this.controls.maxDistance = 50
+    this.controls.enableDamping = true // 是否启用阻尼
+    this.controls.dampingFactor = 0.05 // 阻尼因子
+    this.controls.screenSpacePanning = false // 是否启用屏幕空间平移
+    // this.controls.minDistance = 1 // 最小距离
+    // this.controls.maxDistance = 50 // 最大距离
   }
 
   private bindEvents(): void {
