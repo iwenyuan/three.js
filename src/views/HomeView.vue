@@ -4,13 +4,15 @@ import type { RouteRecordRaw } from 'vue-router'
 const router = useRouter()
 
 const handleClick = (item: RouteRecordRaw) => {
-  console.log(item)
-
+  localStorage.setItem('route', item.path)
   router.push(item.path)
 }
 
 onMounted(() => {
-  handleClick(routes[0].children![0])
+  const route = localStorage.getItem('route')
+  if (!route) {
+    handleClick(routes[0].children![0])
+  }
 })
 </script>
 

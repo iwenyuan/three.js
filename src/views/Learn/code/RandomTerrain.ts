@@ -2,7 +2,6 @@ import * as THREE from 'three'
 import ThreeBase from '@/core/ThreeBase'
 import type { ThreeBaseConfig } from '@/core/ThreeBase'
 import { createNoise2D, type NoiseFunction2D } from 'simplex-noise'
-import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min.js'
 
 class RandomTerrain extends ThreeBase {
   private positions!: THREE.BufferAttribute

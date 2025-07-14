@@ -31,6 +31,14 @@ export const routes: RouteRecordRaw[] = [
         meta: {
           title: '随机地形'
         }
+      },
+      {
+        path: '/material',
+        name: 'Material',
+        component: () => import('@/views/Learn/Material.vue'),
+        meta: {
+          title: '材质'
+        }
       }
     ]
   },
