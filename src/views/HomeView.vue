@@ -8,10 +8,19 @@ const handleClick = (item: RouteRecordRaw) => {
   router.push(item.path)
 }
 
+const openKeys = ref<string[]>([])
+const selectedKeys = ref<string[]>([])
 onMounted(() => {
   const route = localStorage.getItem('route')
   if (!route) {
+    openKeys.value = [routes[0].children![0].path]
+    selectedKeys.value = [routes[0].children![0].path]
     handleClick(routes[0].children![0])
+  } else {
+    console.log(routes)
+
+    openKeys.value = [route]
+    selectedKeys.value = [route]
   }
 })
 </script>

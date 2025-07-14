@@ -39,6 +39,14 @@ export const routes: RouteRecordRaw[] = [
         meta: {
           title: '材质'
         }
+      },
+      {
+        path: '/tunnel',
+        name: 'Tunnel',
+        component: () => import('@/views/Learn/Tunnel.vue'),
+        meta: {
+          title: '隧道'
+        }
       }
     ]
   },
